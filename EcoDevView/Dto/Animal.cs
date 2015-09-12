@@ -11,7 +11,7 @@ namespace Eco.DevView.Dto
     /// However, it's still compatible to <see cref="IAnimal"/>, but should not be used anywhere other than being sent
     /// to the client.
     /// </remarks>
-    class Animal : Object, IAnimal
+    class Animal : Entity, IAnimal
     {
         [JsonProperty("name")]
         public string Name { get; }

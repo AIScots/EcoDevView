@@ -3,7 +3,7 @@
     /// <summary>
     /// A general interface that describes 
     /// </summary>
-    public interface IObject
+    public interface IEntity
     {
         /// <summary>
         /// Unique identifier

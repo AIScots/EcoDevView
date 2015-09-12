@@ -1,6 +1,6 @@
 ﻿namespace Eco.DevView.Dto
 {
-    class Plant : Object, IPlant
+    class Plant : Entity, IPlant
     {
         public Plant(IPlant plant)
             : base(plant)

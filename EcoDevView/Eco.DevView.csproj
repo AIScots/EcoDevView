@@ -99,13 +99,13 @@
   <ItemGroup>
     <Compile Include="Default Implementations\DefaultTileRenderer.cs" />
     <Compile Include="Dto\Animal.cs" />
-    <Compile Include="Dto\Object.cs" />
+    <Compile Include="Dto\Entity.cs" />
     <Compile Include="Dto\Plant.cs" />
     <Compile Include="Simulation Interfaces\IAnimal.cs" />
     <Compile Include="Simulation Interfaces\IAnimalProvider.cs" />
     <Compile Include="Simulation Interfaces\IBlock.cs" />
     <Compile Include="Simulation Interfaces\IBlockProvider.cs" />
-    <Compile Include="Simulation Interfaces\IObject.cs" />
+    <Compile Include="Simulation Interfaces\IEntity.cs" />
     <Compile Include="Simulation Interfaces\IPlant.cs" />
     <Compile Include="Simulation Interfaces\IPlantProvider.cs" />
     <Compile Include="Simulation Interfaces\ITileRenderer.cs" />

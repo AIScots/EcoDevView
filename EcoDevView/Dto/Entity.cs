@@ -3,7 +3,7 @@ using System;
 
 namespace Eco.DevView.Dto
 {
-    abstract class Object
+    abstract class Entity
     {
         /// <summary>
         /// Unique identifier.
@@ -29,7 +29,7 @@ namespace Eco.DevView.Dto
         [JsonProperty("health")]
         public float Health { get; }
 
-        public Object(IObject other)
+        public Entity(IEntity other)
         {
             Id = other.Id;
             X = (float)Math.Round(other.X, 0);
