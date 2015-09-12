@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>test page please ignore</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <script src="js/jquery-1.6.4.min.js"></script>
+    <script src="js/jquery.signalR-2.2.0.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script src="js/ractive.js"></script> <!-- TODO: Replace with AngularJS/EmberJS/similar -->
+    
+    <script type="text/javascript">
+        var ractive; // for convenience
+
+        $(function () {
+            ractive = new Ractive({
+                el: "#container",
+                template: "#template",
+                data: { animals: {}, plants: {} }
+            });
+            
+            var mapHub = $.connection.mapHub;
+            mapHub.logging = true;
+
+            // Called by the server during update cycles whenever a certain time expired OR enough animals have changed.
+            // IAnimal: { int id; string name; float x; float z; float health [0..1]; }
+            // Animals that reach health 0 are sent one last time, server-sided they're already considered dead.
+            mapHub.client.updateAnimals = function (animals) {
+                console.debug('updateAnimals', animals);
+                $.each(animals, function (k, animal) {
+                    // health <= 0 => the animal died. So it goes.
+                    if (animal.health <= 0)
+                    {
+                        delete ractive.get('animals')[animal.id];
+                        return;
+                    }
+
+                    // Just set the whole animal otherwise.
+                    ractive.set('animals.' + animal.id, animal);
+                });
+
+                ractive.update('animals');
+            };
+
+            // Called by the server during update cycles whenever a certain time expired OR enough plants have changed.
+            // IPlant: { int id; float x; float z; float health [0..1]; }
+            // Plants that reach health 0 are sent one last time, server-sided they're already considered dead.
+            mapHub.client.updatePlants = function (plants) {
+                $.each(plants, function (k, plant) {
+                    if (plant.health <= 0)
+                    {
+                        delete ractive.get('plants')[plant.id];
+                        return;
+                    }
+
+                    ractive.set('plants.' + plant.id, plant);
+                });
+
+                ractive.update('plants');
+            };
+
+            $.connection.hub.start().then(function () {
+                console.debug("SignalR started");
+            });
+
+
+            ractive.on('renameAnimal', function (event) {
+                var context = event.context;
+
+                // Ask SignalR to rename it
+                mapHub.server.renameAnimal(context.id, context.name).then(function(data) 
+                {
+                    alert('Successfully renamed animal to', data.name);
+                });
+            });
+
+            ractive.on('killAnimal', function (event) {
+                var context = event.context;
+
+                mapHub.server.setAnimalHealth(context.id, 0).then(function (data) {
+                    alert('You have killed ' + context.name);
+                    delete ractive.get('animals')[context.id];
+                    ractive.update('animals');
+                });
+            });
+
+            ractive.on('healAnimal', function (event) {
+                var context = event.context;
+
+                mapHub.server.setAnimalHealth(context.id, 1).then(function (data) {
+                    ractive.set(event.keypath + '.health', 1);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <script type="text/ractive" id="template">
+        <h2>Animals</h2>
+
+        <div id="canvas">
+            {{#each animals}}
+            <div style="width:10px;height:10px;position:absolute;top:{{z}}px;left:{{x}}px;color:rgb({{200-health*200}}%,{{200*health}}%,0%);">o</div>
+            {{/each}}
+        </div>
+        <table id="animals" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td><td>Name</td><td>X</td><td>Z</td><td>Health</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each animals}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>
+                        <input value="{{name}}" class="form-control" />
+                        <button on-click="renameAnimal" class="btn btn-xs btn-default">Rename</button>
+                    </td>
+                    <td>{{x}}</td>
+                    <td>{{z}}</td>
+                    <td>
+                        {{health * 100}} 
+                        <button on-click="killAnimal" class="btn btn-xs btn-danger">Kill</button>
+                        <button on-click="healAnimal" class="btn btn-xs btn-success">Heal</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <h2>Plants</h2>
+        <table id="plants" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>X</td>
+                    <td>Z</td>
+                    <td>Health</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each plants}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{x}}</td>
+                    <td>{{z}}</td>
+                    <td>{{health}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+
+    <div id="container" class="container"></div>
+</body>
+</html>
