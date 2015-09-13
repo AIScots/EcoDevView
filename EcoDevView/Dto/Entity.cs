@@ -29,12 +29,19 @@ namespace Eco.DevView.Dto
         [JsonProperty("health")]
         public float Health { get; }
 
+        /// <summary>
+        /// The species/type of entity ("deer", "fern")
+        /// </summary>
+        [JsonProperty("species")]
+        public string Species { get; }
+        
         public Entity(IEntity other)
         {
             Id = other.Id;
             X = (float)Math.Round(other.X, 0);
             Z = (float)Math.Round(other.Z, 0);
             Health = (float)Math.Round(other.Health, 2);
+            Species = other.Species;
         }
     }
 }

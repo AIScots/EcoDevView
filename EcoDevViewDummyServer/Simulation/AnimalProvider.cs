@@ -5,7 +5,7 @@ namespace Eco.DevView.DummyServer
     class AnimalProvider : GenericProvider<Animal>, IAnimalProvider
     {
         public AnimalProvider()
-            : base((id, name, x, z) => new Animal(id, name, x, z))
+            : base((id, random) => new Animal(id, random))
         {
             _log = NLog.LogManager.GetCurrentClassLogger();
 

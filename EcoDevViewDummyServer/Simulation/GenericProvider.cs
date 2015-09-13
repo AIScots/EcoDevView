@@ -6,7 +6,7 @@ namespace Eco.DevView.DummyServer
 {
     class GenericProvider<T> where T : IUpdateable
     {
-        internal delegate T Factory(int id, string name, float x, float z);
+        internal delegate T Factory(int id, Random random);
 
         private List<T> _objects = new List<T>();
         private HashSet<T> _updatedObjects = new HashSet<T>();
@@ -24,7 +24,7 @@ namespace Eco.DevView.DummyServer
 
         protected void CreateObject()
         {
-            var obj = _factory(++_lastObjectId, $"{typeof(T).Name} {_lastObjectId}", (float)_random.NextDouble() * 300f, (float)_random.NextDouble() * 300f);
+            var obj = _factory(++_lastObjectId, _random);
             _log.Info("Happy instantiation day, {0}!", obj);
             _objects.Add(obj);
             _updatedObjects.Add(obj);

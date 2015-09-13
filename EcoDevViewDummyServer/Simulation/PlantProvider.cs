@@ -5,7 +5,7 @@ namespace Eco.DevView.DummyServer
     class PlantProvider : GenericProvider<Plant>, IPlantProvider
     {
         public PlantProvider()
-            : base((id, name, x, z) => new Plant(id, x, z))
+            : base((id, random) => new Plant(id, random))
         {
             _log = NLog.LogManager.GetCurrentClassLogger();
 

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RandomExtensions.cs" />
     <Compile Include="Simulation\Animal.cs" />
     <Compile Include="Simulation\AnimalProvider.cs" />
     <Compile Include="Simulation\Block.cs" />

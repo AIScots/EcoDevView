@@ -22,16 +22,19 @@ namespace Eco.DevView.DummyServer
 
 
         public string Name { get; set; }
+        public string Species { get; }
+        public static readonly string[] AvailableSpecies = new string[]{ "Deer", "Wolf", "Elephant", "Giraffe", "Unicorn" };
 
         public float X { get; set; }
         public float Z { get; set; }
 
-        public Animal(int id, string name, float x, float z)
+        public Animal(int id, Random random)
         {
             Id = id;
-            Name = name;
-            X = x;
-            Z = z;
+            X = random.NextFloat(0, 300f);
+            Z = random.NextFloat(0, 300f);
+            Species = AvailableSpecies[random.Next(0, AvailableSpecies.Length)];
+            Name = $"{Species} {Id}";
         }
 
         //private void MarkChanged()

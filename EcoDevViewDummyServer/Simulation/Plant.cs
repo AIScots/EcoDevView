@@ -20,12 +20,15 @@ namespace Eco.DevView.DummyServer
         }
         public float X { get; set; }
         public float Z { get; set; }
+        public string Species { get; }
+        public static readonly string[] AvailableSpecies = new string[] { "Fern", "Tree", "Bush", "Tomato", "Potato" };
 
-        public Plant(int id, float x, float z)
+        public Plant(int id, Random random)
         {
             Id = id;
-            X = x;
-            Z = z;
+            X = random.NextFloat(0, 300f);
+            Z = random.NextFloat(0, 300f);
+            Species = AvailableSpecies[random.Next(0, AvailableSpecies.Length)];
         }
 
         public override string ToString() => $"Plant {Id} ({Health * 100:0.00}%)";
@@ -34,7 +37,7 @@ namespace Eco.DevView.DummyServer
         {
             if (random.NextDouble() < 0.05)
             {
-                Health = Math.Max(0f, Math.Min(Health + (float)(random.NextDouble() - 0.5) / 10f, 1f)); // chance of varying up to 10% of our health
+                Health = Math.Max(0f, Math.Min(Health + random.NextFloat(-0.1f, 0.1f), 1f)); // chance of varying up to 10% of our health
 
                 // Dead?
                 if (Health <= 0f)

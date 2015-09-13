@@ -107,7 +107,12 @@
         <table id="animals" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <td>ID</td><td>Name</td><td>X</td><td>Z</td><td>Health</td>
+                    <td>ID</td>
+                    <td>Name</td>
+                    <td>Species</td>
+                    <td>X</td>
+                    <td>Z</td>
+                    <td>Health</td>
                 </tr>
             </thead>
             <tbody>
@@ -118,6 +123,7 @@
                         <input value="{{name}}" class="form-control" />
                         <button on-click="renameAnimal" class="btn btn-xs btn-default">Rename</button>
                     </td>
+                    <td>{{species}}</td>
                     <td>{{x}}</td>
                     <td>{{z}}</td>
                     <td>
@@ -135,6 +141,7 @@
             <thead>
                 <tr>
                     <td>ID</td>
+                    <td>Species</td>
                     <td>X</td>
                     <td>Z</td>
                     <td>Health</td>
@@ -144,6 +151,7 @@
                 {{#each plants}}
                 <tr>
                     <td>{{id}}</td>
+                    <td>{{species}}</td>
                     <td>{{x}}</td>
                     <td>{{z}}</td>
                     <td>{{health}}</td>
