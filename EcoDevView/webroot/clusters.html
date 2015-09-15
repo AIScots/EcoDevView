@@ -52,10 +52,10 @@
         L.Icon.MarkerCluster1 = L.Icon.extend({
             options: {
                 iconSize: new L.Point(44, 44),
-                className: 'prunecluster leaflet-markercluster-icon'
+                className: 'prunecluster leaflet-markercluster-icon z1'
             },
             createIcon: function() {
-                // based on L.Icon.Canvas from shramov/leaflet-plugins (BSD licence)
+                /* based on L.Icon.Canvas from shramov/leaflet-plugins (BSD licence) */
                 var e = document.createElement('canvas');
                 this._setIconStyles(e, 'icon');
                 var s = this.options.iconSize;
@@ -103,10 +103,10 @@
         L.Icon.MarkerCluster2 = L.Icon.extend({
             options: {
                 iconSize: new L.Point(44, 44),
-                className: 'prunecluster leaflet-markercluster-icon'
+                className: 'prunecluster leaflet-markercluster-icon z2'
             },
             createIcon: function() {
-                // based on L.Icon.Canvas from shramov/leaflet-plugins (BSD licence)
+                /* based on L.Icon.Canvas from shramov/leaflet-plugins (BSD licence) */
                 var e = document.createElement('canvas');
                 this._setIconStyles(e, 'icon');
                 var s = this.options.iconSize;
@@ -156,15 +156,19 @@
         var pmarkers = [];
         var pmarker = [];
         var pmarks = [];
-        $(function() {
+        var amarkers = [];
+        var amarker = [];
+        var amarks = [];
+        var planttypes = ['', 'Daisy'];
+        var animaltypes = ['', 'Wolf', 'Hare', 'Elk', 'Elephant', 'Giraffe', 'Unicorn', 'Rabbit', 'Deer'];
             ractive = new Ractive({
                 data: {
-                    animals: {}
+                    animals: {},
+                    plants: {}
                 }
             });
             var mapHub = $.connection.mapHub;
             mapHub.logging = true;
-            var planttypes = ['', 'Daisy'];
             mapHub.client.updatePlants = function(plants) {
                 $.each(plants, function(k, plant) {
                     if (pmarker[plant.id]) {
@@ -191,24 +195,6 @@
                 });
                 plantView.ProcessView();
             };
-            $.connection.hub.start().done(function() {
-                console.debug("SignalR started");
-            });
-        });
-        map.addLayer(plantView);
-        var size = 10000;
-        var amarkers = [];
-        var amarker = [];
-        var amarks = [];
-        $(function() {
-            ractive = new Ractive({
-                data: {
-                    animals: {}
-                }
-            });
-            var mapHub = $.connection.mapHub;
-            mapHub.logging = true;
-            var animaltypes = ['', 'Wolf', 'Hare', 'Elk', 'Elephant', 'Giraffe', 'Unicorn', 'Rabbit', 'Deer'];
             mapHub.client.updateAnimals = function(animals) {
                 $.each(animals, function(k, animal) {
                     if (amarker[animal.id]) {
@@ -239,7 +225,7 @@
             $.connection.hub.start().done(function() {
                 console.debug("SignalR started");
             });
-        });
+        map.addLayer(plantView);
         map.addLayer(animalView);
     </script>
 </body>
