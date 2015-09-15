@@ -122,9 +122,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gulpfile.js" />
+    <Content Include="webroot\clusters.html" />
     <Content Include="webroot\css\bootstrap.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="webroot\css\MarkerCluster.css" />
+    <Content Include="webroot\css\MarkerCluster.Default.css" />
+    <Content Include="webroot\css\screen.css" />
     <Content Include="webroot\Index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -142,6 +146,7 @@
     <Content Include="webroot\js\jquery.signalR-2.2.0.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="webroot\js\PruneCluster.js" />
     <Content Include="webroot\js\ractive.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
