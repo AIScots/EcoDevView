@@ -1,0 +1,2 @@
+﻿interface IPlant extends IEntity {
+}

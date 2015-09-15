@@ -123,46 +123,38 @@
   <ItemGroup>
     <Content Include="gulpfile.js" />
     <Content Include="webroot\clusters.html" />
-    <Content Include="webroot\css\bootstrap.min.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="webroot\css\bootstrap.min.css" />
     <Content Include="webroot\css\MarkerCluster.css" />
     <Content Include="webroot\css\MarkerCluster.Default.css" />
     <Content Include="webroot\css\screen.css" />
-    <Content Include="webroot\Index.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="webroot\Index.html" />
     <Content Include="webroot\js\bootstrap.min.js" />
     <Content Include="webroot\js\jquery-1.6.4-vsdoc.js" />
-    <Content Include="webroot\js\jquery-1.6.4.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="webroot\js\jquery-1.6.4.min.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="webroot\js\jquery.signalR-2.2.0.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="webroot\js\jquery.signalR-2.2.0.min.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="webroot\js\jquery-1.6.4.js" />
+    <Content Include="webroot\js\jquery-1.6.4.min.js" />
+    <Content Include="webroot\js\jquery.signalR-2.2.0.js" />
+    <Content Include="webroot\js\jquery.signalR-2.2.0.min.js" />
     <Content Include="webroot\js\PruneCluster.js" />
-    <Content Include="webroot\js\ractive.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="webroot\Test.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="webroot\js\ractive.js" />
+    <Content Include="webroot\Test.html" />
+    <Content Include="webroot\TSTest.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="webroot\ts\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="TypeScript\App.ts" />
+    <TypeScriptCompile Include="TypeScript\IAnimal.ts" />
+    <TypeScriptCompile Include="TypeScript\IEntity.ts" />
+    <TypeScriptCompile Include="TypeScript\IPlant.ts" />
+    <TypeScriptCompile Include="TypeScript\SignalR.ts" />
     <TypeScriptCompile Include="TypeScript\Test.ts" />
     <TypeScriptCompile Include="TypeScript\typings\angular2\angular2.d.ts" />
     <TypeScriptCompile Include="TypeScript\typings\es6-promise\es6-promise.d.ts" />
+    <TypeScriptCompile Include="TypeScript\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="TypeScript\typings\rx\rx-lite.d.ts" />
     <TypeScriptCompile Include="TypeScript\typings\rx\rx.d.ts" />
+    <TypeScriptCompile Include="TypeScript\typings\signalr\signalr.d.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
