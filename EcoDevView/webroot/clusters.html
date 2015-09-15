@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Animal Cluster Test Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/jquery-1.6.4.min.js"></script>
+    <script src="js/jquery.signalR-2.2.0.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+    <link rel="stylesheet" href="css/screen.css" />
+    <link rel="stylesheet" href="css/MarkerCluster.css" />
+    <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+    <script src="js/PruneCluster.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script src="js/ractive.js"></script>
+    <!-- TODO: Replace with AngularJS/EmberJS/similar -->
+
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map("map", {
+            attributionControl: false,
+            zoomControl: false
+        }).setView(new L.LatLng(0, 0), 2);
+        L.tileLayer('', {
+            detectRetina: true,
+            maxZoom: 5
+        }).addTo(map);
+
+        var plantView = new PruneClusterForLeaflet();
+        var animalView = new PruneClusterForLeaflet();
+
+        plantView.BuildLeafletClusterIcon = function(cluster) {
+            var e = new L.Icon.MarkerCluster2();
+            e.stats = cluster.stats;
+            e.population = cluster.population;
+            return e;
+        };
+        animalView.BuildLeafletClusterIcon = function(cluster) {
+            var e = new L.Icon.MarkerCluster1();
+            e.stats = cluster.stats;
+            e.population = cluster.population;
+            return e;
+        };
+
+        var colors = ['#ff4b00', '#bac900', '#EC1813', '#55BCBE', '#D2204C', '#FF0000', '#ada59a', '#3e647e'],
+            pi2 = Math.PI * 2;
+
+        L.Icon.MarkerCluster1 = L.Icon.extend({
+            options: {
+                iconSize: new L.Point(44, 44),
+                className: 'prunecluster leaflet-markercluster-icon z1'
+            },
+            createIcon: function() {
+                /* based on L.Icon.Canvas from shramov/leaflet-plugins (BSD licence) */
+                var e = document.createElement('canvas');
+                this._setIconStyles(e, 'icon');
+                var s = this.options.iconSize;
+                e.width = s.x;
+                e.height = s.y;
+                this.draw(e.getContext('2d'), s.x, s.y);
+                return e;
+            },
+            createShadow: function() {
+                return null;
+            },
+            draw: function(canvas, width, height) {
+                var lol = 0;
+                var start = 0;
+                for (var i = 0, l = colors.length; i < l; ++i) {
+                    var size = this.stats[i] / this.population;
+                    if (size > 0) {
+                        canvas.beginPath();
+                        canvas.moveTo(22, 22);
+                        canvas.fillStyle = colors[i];
+                        var from = start + 0.14,
+                            to = start + size * pi2;
+                        if (to < from) {
+                            from = start;
+                        }
+                        canvas.arc(22, 22, 22, from, to);
+                        start = start + size * pi2;
+                        canvas.lineTo(22, 22);
+                        canvas.fill();
+                        canvas.closePath();
+                    }
+                }
+                canvas.beginPath();
+                canvas.fillStyle = 'white';
+                canvas.arc(22, 22, 18, 0, Math.PI * 2);
+                canvas.fill();
+                canvas.closePath();
+                canvas.fillStyle = '#555';
+                canvas.textAlign = 'center';
+                canvas.textBaseline = 'middle';
+                canvas.font = 'bold 12px sans-serif';
+                canvas.fillText(this.population, 22, 22, 40);
+            }
+        });
+        L.Icon.MarkerCluster2 = L.Icon.extend({
+            options: {
+                iconSize: new L.Point(44, 44),
+                className: 'prunecluster leaflet-markercluster-icon z2'
+            },
+            createIcon: function() {
+                /* based on L.Icon.Canvas from shramov/leaflet-plugins (BSD licence) */
+                var e = document.createElement('canvas');
+                this._setIconStyles(e, 'icon');
+                var s = this.options.iconSize;
+                e.width = s.x;
+                e.height = s.y;
+                this.draw(e.getContext('2d'), s.x, s.y);
+                return e;
+            },
+            createShadow: function() {
+                return null;
+            },
+            draw: function(canvas, width, height) {
+                var lol = 0;
+                var start = 0;
+                for (var i = 0, l = colors.length; i < l; ++i) {
+                    var size = this.stats[i] / this.population;
+                    if (size > 0) {
+                        canvas.beginPath();
+                        canvas.moveTo(22, 22);
+                        canvas.fillStyle = colors[i];
+                        var from = start + 0.14,
+                            to = start + size * pi2;
+                        if (to < from) {
+                            from = start;
+                        }
+                        canvas.arc(22, 22, 22, from, to);
+                        start = start + size * pi2;
+                        canvas.lineTo(22, 22);
+                        canvas.fill();
+                        canvas.closePath();
+                    }
+                }
+                canvas.beginPath();
+                canvas.fillStyle = 'DarkSeaGreen';
+                canvas.globalAlpha = 0.5;
+                canvas.arc(22, 22, 18, 0, Math.PI * 2);
+                canvas.fill();
+                canvas.closePath();
+                canvas.fillStyle = '#000';
+                canvas.textAlign = 'left';
+                canvas.textBaseline = 'top';
+                canvas.font = 'bold 12px sans-serif';
+                canvas.fillText(this.population, 22, 22, 40);
+            }
+        });
+
+        var pmarkers = [];
+        var pmarker = [];
+        var pmarks = [];
+        var amarkers = [];
+        var amarker = [];
+        var amarks = [];
+        var planttypes = ['', 'Daisy'];
+        var animaltypes = ['', 'Wolf', 'Hare', 'Elk', 'Elephant', 'Giraffe', 'Unicorn', 'Rabbit', 'Deer'];
+            ractive = new Ractive({
+                data: {
+                    animals: {},
+                    plants: {}
+                }
+            });
+            var mapHub = $.connection.mapHub;
+            mapHub.logging = true;
+            mapHub.client.updatePlants = function(plants) {
+                $.each(plants, function(k, plant) {
+                    if (pmarker[plant.id]) {
+                        pmarker[plant.id].Move(0 - ((plant.z - 150) / 2), 0 - ((plant.x - 150) / 2));
+                    } else {
+                        pmarker[plant.id] = new PruneCluster.Marker(0 - ((plant.z - 150) / 2), 0 - ((plant.x - 150) / 2));
+                        pmarker[plant.id].category = planttypes.indexOf(plant.species);
+                        if (pmarker.category == -1) pmarker.category = 0;
+                        pmarks[plant.id] = [0 - ((plant.z - 150) / 2), 0 - ((plant.x - 150) / 2)];
+                        pmarker[plant.id].data.ID = plant.id;
+                        pmarker[plant.id].data.popup = 'Plant: ' + plant.id + '<br> Species: ' + plant.species + '<br> Health: ' + (plant.health * 100);
+                        /*
+                        pmarker[plant.id].data.icon = L.icon({
+                            iconUrl: '../img/' + plant.species + '.png',
+                            iconRetinaUrl: '../img/' + plant.species + '2.png',
+                            iconSize: [16, 16],
+                            iconAnchor: [8, 8],
+                            popupAnchor: [-10, -10]
+                        });
+                        */
+                        pmarkers.push(pmarker[plant.id]);
+                        plantView.RegisterMarker(pmarker[plant.id]);
+                    }
+                });
+                plantView.ProcessView();
+            };
+            mapHub.client.updateAnimals = function(animals) {
+                $.each(animals, function(k, animal) {
+                    if (amarker[animal.id]) {
+                        amarker[animal.id].Move(0 - ((animal.z - 150) / 2), 0 - ((animal.x - 150) / 2));
+                    } else {
+                        amarker[animal.id] = new PruneCluster.Marker(0 - ((animal.z - 150) / 2), 0 - ((animal.x - 150) / 2));
+                        amarker[animal.id].category = animaltypes.indexOf(animal.species);
+                        if (amarker.category == -1) amarker.category = 0;
+                        amarks[animal.id] = [0 - ((animal.z - 150) / 2), 0 - ((animal.x - 150) / 2)];
+                        amarker[animal.id].data.name = animal.name;
+                        amarker[animal.id].data.ID = animal.id;
+                        amarker[animal.id].data.popup = animal.name + '<br> Species: ' + animal.species + '<br> Health: ' + (animal.health * 100);
+                        /*
+                        amarker[animal.id].data.icon = L.icon({
+                            iconUrl: '../img/' + animal.species + '.png',
+                            iconRetinaUrl: '../img/' + animal.species + '2.png',
+                            iconSize: [16, 16],
+                            iconAnchor: [8, 8],
+                            popupAnchor: [-10, -10]
+                        });
+                        */
+                        amarkers.push(amarker[animal.id]);
+                        animalView.RegisterMarker(amarker[animal.id]);
+                    }
+                });
+                animalView.ProcessView();
+            };
+            $.connection.hub.start().done(function() {
+                console.debug("SignalR started");
+            });
+        map.addLayer(plantView);
+        map.addLayer(animalView);
+    </script>
+</body>
+
+</html>
