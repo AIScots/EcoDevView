@@ -116,9 +116,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="package.json" />
     <None Include="packages.config" />
+    <None Include="tsd.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="gulpfile.js" />
     <Content Include="webroot\css\bootstrap.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -146,7 +149,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="webroot\ts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="TypeScript\Test.ts" />
+    <TypeScriptCompile Include="TypeScript\typings\angular2\angular2.d.ts" />
+    <TypeScriptCompile Include="TypeScript\typings\es6-promise\es6-promise.d.ts" />
+    <TypeScriptCompile Include="TypeScript\typings\rx\rx-lite.d.ts" />
+    <TypeScriptCompile Include="TypeScript\typings\rx\rx.d.ts" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
